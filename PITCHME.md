@@ -18,5 +18,5 @@
 - ~~Automatically indexed for performance~~
 - ~~Effortless querying forward and backwards~~
 
----?image=images/scarcely.png
+---?image=images/scarcely.png&size=auto
 
