@@ -1,9 +1,9 @@
 # Generic foreign keys: why not?
 
----?image=images/hey-why-not.png?size=50%
+---?image=images/hey-why-not.png
+content
 
 ---?image=images/heres-why-not.png?size=50%
-
 ---
 ### What is a foreign key?
 - Reference that uniquely identifies a model
