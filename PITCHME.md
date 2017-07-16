@@ -1,6 +1,8 @@
----?image=images/hey-why-not.png?size=auto
+# Generic foreign keys: why not?
 
----?image=images/heres-why-not.png?size=auto
+---?image=images/hey-why-not.png?size=50%
+
+---?image=images/heres-why-not.png?size=50%
 
 ---
 ### What is a foreign key?
