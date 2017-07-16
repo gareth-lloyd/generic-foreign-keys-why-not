@@ -3,7 +3,7 @@
 ---?image=images/hey-why-not.png&size=60%
 
 ---
-![IMAGE](images/hey-why-not.png&size=60%)
+![IMAGE](images/hey-why-not.png)
 
 ---?image=images/heres-why-not.png&size=60%
 ---
