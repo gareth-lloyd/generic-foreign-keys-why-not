@@ -1,9 +1,11 @@
 # Generic foreign keys: why not?
 
----?image=images/hey-why-not.png
-content
+---?image=images/hey-why-not.png&size=60%
 
----?image=images/heres-why-not.png?size=50%
+---
+![IMAGE](images/hey-why-not.png&size=60%)
+
+---?image=images/heres-why-not.png&size=60%
 ---
 ### What is a foreign key?
 - Reference that uniquely identifies a model
