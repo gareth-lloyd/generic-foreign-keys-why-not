@@ -5,7 +5,7 @@
 ---?image=images/heres-why-not.png&size=80%
 
 ---
-### What is a foreign key?
+### Foreign key
 - Reference that uniquely identifies a model
 - Implemented at database level
 - Firm guarantees of referential integrity
@@ -13,7 +13,7 @@
 - Effortless querying forward and backwards
 
 ---
-### What is a generic foreign key?
+### Generic foreign key
 - Reference that uniquely identifies a model
 - ~~Implemented at database level~~
 - ~~Firm guarantees of referential integrity~~
@@ -22,3 +22,13 @@
 
 ---?image=images/scarcely.png
 
+---
+## Generic foreign keys considered harmful?
+Django core committers advising against using them
+
+Luke Plant: <a href="https://lukeplant.me.uk/blog/posts/avoid-django-genericforeignkey/" target="_blank">Avoid Generic Foreign keys</a>.
+
+Marc Tamlyn: <a href="https://www.youtube.com/watch?v=aDt4gu99_bE" target="_blank">Weird and wonderful things to do with the ORM</a>.
+
+---
+## This one neat trick
