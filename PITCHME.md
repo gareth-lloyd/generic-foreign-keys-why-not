@@ -1,28 +1,27 @@
 #### Generic foreign keys: why not?
 
-![MARKDOWN](images/hey-why-not.png)
+![LOGO](images/hey-why-not.png)
 
 ---
 ### Generic foreign keys: why not?
 
-![MARKDOWN](images/heres-why-not.png)
+![LOGO](images/heres-why-not.png)
 
 ---
 ### What is a foreign key?
-- Reference that uniquely identifies another model in your database
-- Implemented at the database level
-- Flexible but firm guarantees of referential integrity
+- Reference that uniquely identifies a model
+- Implemented at database level
+- Firm guarantees of referential integrity
 - Automatically indexed for performance
-- Effortless querying forward and backwards across the relationship
+- Effortless querying forward and backwards
 
 ---
 ### What is a generic foreign key?
-- Reference that uniquely identifies another model in your database
-- ~~Implemented at the database level~~
-- ~~Flexible but firm guarantees of referential integrity~~
+- Reference that uniquely identifies a model
+- ~~Implemented at database level~~
+- ~~Firm guarantees of referential integrity~~
 - ~~Automatically indexed for performance~~
-- ~~Effortless querying forward and backwards across the relationship~~
+- ~~Effortless querying forward and backwards~~
 
----
 ---?image=images/scarcely.png
 
