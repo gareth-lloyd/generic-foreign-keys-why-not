@@ -1,11 +1,8 @@
+---?image=images/hey-why-not.png?size=auto 50%
 #### Generic foreign keys: why not?
 
-![LOGO](images/hey-why-not.png)
-
----
+---?image=images/heres-why-not.png?size=auto 50%
 ### Generic foreign keys: why not?
-
-![LOGO](images/heres-why-not.png&size=auto)
 
 ---
 ### What is a foreign key?
