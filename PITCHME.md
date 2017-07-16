@@ -5,7 +5,7 @@
 ---
 ### Generic foreign keys: why not?
 
-![LOGO](images/heres-why-not.png)
+![LOGO](images/heres-why-not.png&size=auto)
 
 ---
 ### What is a foreign key?
