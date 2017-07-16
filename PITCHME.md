@@ -3,6 +3,7 @@
 ---?image=images/hey-why-not.png&size=40%
 
 ---?image=images/heres-why-not.png&size=80%
+
 ---
 ### What is a foreign key?
 - Reference that uniquely identifies a model
@@ -19,5 +20,5 @@
 - ~~Automatically indexed for performance~~
 - ~~Effortless querying forward and backwards~~
 
----?image=images/scarcely.png&size=auto
+---?image=images/scarcely.png
 
