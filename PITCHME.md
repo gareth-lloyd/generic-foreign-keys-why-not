@@ -69,3 +69,17 @@ Used properly, can enable:
 
 ---
 ## So there are these great applications. Can we overcome the bad bits?
+---
+### Implementation
+```py
+class Customer(models.Model):
+    pass
+   
+class Employee(models.Model):
+    pass
+    
+class SentEmail(models.Model):
+    object_id = models.BigIntegerField()
+    content_type = models.ForeignKey(ContentType)
+    sent_to = GenericForeignKey('content_type', 'instance_id')
+```
