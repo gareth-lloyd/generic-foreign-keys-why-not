@@ -70,16 +70,27 @@ Used properly, can enable:
 ---
 ## So there are these great applications. Can we overcome the bad bits?
 ---
-### Implementation
+### Definition
 ```py
 class Customer(models.Model):
-    pass
+    email = models.EmailField()
    
 class Employee(models.Model):
-    pass
+    email = models.EmailField()
     
 class SentEmail(models.Model):
+    text
     object_id = models.BigIntegerField()
     content_type = models.ForeignKey(ContentType)
     sent_to = GenericForeignKey('content_type', 'instance_id')
+```
+### Creation
+```py
+>>> customer = Customer.objects.order_by('?').first()
+>>> sent_text = send_spam_email(customer.email)
+>>> SentEmail.objects.create(sent_to=customer, text=sent_text)
+
+>>> employee = Employee.objects.order_by('?').first()
+>>> sent_text = send_spam_email(employee.email)
+>>> SentEmail.objects.create(sent_to=worker, text=sent_text)
 ```
