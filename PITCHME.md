@@ -84,13 +84,19 @@ class SentEmail(models.Model):
     content_type = models.ForeignKey(ContentType)
     sent_to = GenericForeignKey('content_type', 'instance_id')
 ```
+---
 ### Creation
 ```py
->>> customer = Customer.objects.order_by('?').first()
->>> sent_text = send_spam_email(customer.email)
->>> SentEmail.objects.create(sent_to=customer, text=sent_text)
+def spam_customers():
+    for _ in xrange(100000):
+        send_and_record_spam(Customer.objects.order_by('?').first())
 
->>> employee = Employee.objects.order_by('?').first()
->>> sent_text = send_spam_email(employee.email)
->>> SentEmail.objects.create(sent_to=worker, text=sent_text)
+def spam_employees():
+    for _ in xrange(100000):
+        send_and_record_spam(Customer.objects.order_by('?').first())
+        
+def send_and_record_spam(instance):
+    spam_text = generate_spam()
+    send_email(instance.email, spam_text)
+    SentEmail.objects.create(sent_to=instance, text=spam_text)
 ```
