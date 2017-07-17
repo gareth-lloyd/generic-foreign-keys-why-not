@@ -118,6 +118,7 @@ def spam_employees():
 
 <Employee: Raj>
 ```
+---
 ### Querying
 ```
 >>> customer = Customer.objects.get(email='spam_trap@gmail.com')
