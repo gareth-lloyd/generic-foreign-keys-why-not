@@ -78,19 +78,24 @@ class Customer(models.Model):
 class Employee(models.Model):
     email = models.EmailField()
     
-class SentEmail(models.Model):
-    text
+class Spam(models.Model):
+    text = models.TextField()
+    sent_at = models.DateTimeField(auto_now_add=True)
+    
     object_id = models.BigIntegerField()
     content_type = models.ForeignKey(ContentType)
     sent_to = GenericForeignKey('content_type', 'instance_id')
 ```
 ---
+### Content Types
+- Uniquely identifies a Django model
+---
 ### Creation
-```py   
+```py
 def send_and_record_spam(instance):
     spam_text = generate_spam()
     send_email(instance.email, spam_text)
-    SentEmail.objects.create(sent_to=instance, text=spam_text)
+    Spam.objects.create(sent_to=instance, text=spam_text)
     
 def spam_customers():
     for _ in xrange(100000):
@@ -98,5 +103,33 @@ def spam_customers():
 
 def spam_employees():
     for _ in xrange(100000):
-        send_and_record_spam(Customer.objects.order_by('?').first())
+        send_and_record_spam(Employee.objects.order_by('?').first())
+```
+---
+### Retrieval
+```py
+>>> first_spam = Spam.objects.order_by('sent_at').first()
+>>> first_spam.sent_to
+
+<Customer: Pam>
+
+>>> last_spam = Spam.objects.order_by('sent_at').last()
+>>> last_spam.sent_to
+
+<Employee: Raj>
+```
+### Querying
+```
+>>> customer = Customer.objects.get(email='spam_trap@gmail.com')
+>>> Spam.objects.filter(sent_to=customer)
+
+---------------------------------------------------------------------------
+FieldError                                Traceback (most recent call last)
+...
+FieldError: Field 'sent_to' does not generate an automatic reverse relation and therefore cannot be used for reverse querying. If it is a GenericForeignKey, consider adding a GenericRelation.
+
+>>> content_type = ContentType.objects.get_for_model(Customer)
+>>> Spam.objects.filter(content_type=content_type, object_id=customer.id)]
+
+<QuerySet [<Spam: 'You have won the lottery'>, <Spam: 'You have won the lottery'>, <Spam: 'You have won the lottery'>, ... ]>
 ```
