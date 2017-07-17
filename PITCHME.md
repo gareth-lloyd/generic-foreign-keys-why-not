@@ -86,7 +86,12 @@ class SentEmail(models.Model):
 ```
 ---
 ### Creation
-```py
+```py   
+def send_and_record_spam(instance):
+    spam_text = generate_spam()
+    send_email(instance.email, spam_text)
+    SentEmail.objects.create(sent_to=instance, text=spam_text)
+    
 def spam_customers():
     for _ in xrange(100000):
         send_and_record_spam(Customer.objects.order_by('?').first())
@@ -94,9 +99,4 @@ def spam_customers():
 def spam_employees():
     for _ in xrange(100000):
         send_and_record_spam(Customer.objects.order_by('?').first())
-        
-def send_and_record_spam(instance):
-    spam_text = generate_spam()
-    send_email(instance.email, spam_text)
-    SentEmail.objects.create(sent_to=instance, text=spam_text)
 ```
