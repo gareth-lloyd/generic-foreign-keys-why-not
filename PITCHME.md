@@ -177,7 +177,7 @@ INNER JOIN "cleaners_cleaner" ON (
 )
 WHERE "cleaners_cleaner"."name" = 'gareth'
 ```
-@[1-7]
+@[8-13]
 
 ---
 ### GenericRelation also enables aggregation
