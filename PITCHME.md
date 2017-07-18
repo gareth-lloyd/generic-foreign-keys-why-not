@@ -59,7 +59,29 @@ class Event(models.Model):
 @[5-7](Wrap content_type and object_id as a GFK)
 
 ---
-### What is GenericForeignKey doing?
+### Content types: let's get meta
+
+- It's a model to describe models
+```sql
+# \d django_content_type;
+                                  Table "public.django_content_type"
+  Column   |          Type          |    Modifiers                             
+-----------+------------------------+-------------------
+ id        | integer                | not null
+ app_label | character varying(100) | not null
+ model     | character varying(100) | not null
+---
+```
+
+```py
+>>> ct = ContentType.objects.get_for_model(Customer)
+>>> ct.get_object_for_this_type(id=1)
+
+<Customer: Gareth>
+```
+---
+
+### The Generic Foreign Key field class
 ```py
 class GenericForeignKey(object):
     def contribute_to_class(self, cls, name, **kwargs):
@@ -71,8 +93,8 @@ class GenericForeignKey(object):
             instance.object_id
         )
 ```
-@[2-4](Add self as a field on the model class)
-@[6-9](Work as a descriptor using content type and object ID to return referenced model)
+@[2-4](Add self to the model as a field, and descriptor)
+@[6-9](Use the particular content type and ID to return referenced model)
 
 ---
 ### Record a change to a model
@@ -80,15 +102,16 @@ class GenericForeignKey(object):
 class Cleaner(models.Model):
     name = models.CharField(max_length=128)
     
+def record_changes(subject, attrs):
+    changes = {getattr(subject, attr) for attr in attrs}
+    Event.objects.create(subject=subject, changes=changes)
+
 def set_cleaner_name(cleaner, name):
     cleaner.name = name
     cleaner.save()
-    Event.objects.create(
-        subject=cleaner,
-        changes={'name': name}
-    )
+    record_changes(cleaner, ['name'])
 ```
-@[8]
+@[4-5]
 
 ---
 ### Record a change to a different type of model
@@ -100,10 +123,11 @@ class Job(models.Model):
 def assign_job(job, cleaner):
     job.cleaner = cleaner
     job.save()
-    Event.objects.create(
-        subject=job,
-        changes={'cleaner': cleaner.id}
-    )
+    record_changes(job, ['cleaner'])
+
+def start_job(job):
+    job.started_at = datetime.now()
+    record_changes(job, ['started_at'])
 ```
 @[9]
 
@@ -141,7 +165,7 @@ FieldError: Field 'subject' does not generate an automatic reverse relation...
 @[10-11](We have to query explicitly on the content type and ID fields)
 
 ---
-### GenericRelation
+### Generic relation
 
 ```py
 class Cleaner(models.Model):
@@ -156,7 +180,7 @@ class Cleaner(models.Model):
 @[5-7](We can now query similarly to the reverse relationship of a traditional foreign key)
 
 ---
-### GenericRelation with related query name
+### Generic relation with related query name
 ```py
 class Cleaner(models.Model):
     name = models.CharField(max_length=128)
@@ -175,12 +199,12 @@ INNER JOIN "cleaners_cleaner" ON (
     "events_event"."instance_id" = "cleaners_cleaner"."id"
     AND ("events_event"."content_type_id" = 41)
 )
-WHERE "cleaners_cleaner"."name" = 'gareth'
+WHERE "cleaners_cleaner"."name" = 'Frederick'
 ```
 @[8-13]
 
 ---
-### GenericRelation also enables aggregation
+### Generic relation also enables aggregation
 ```py
 >>> Cleaner.objects.aggregate(Min('events__occurred_at'))
 
@@ -232,7 +256,6 @@ $ ./manage.py migrate
 
 ---------------------------------------------------------------------------
 AttributeError                            Traceback (most recent call last)
-/srv/housekeep/housekeep/fixes/shortcuts/__init__.pyc in <module>()
 
 AttributeError: 'NoneType' object has no attribute '_base_manager'
 ```
@@ -271,7 +294,7 @@ The purists are looking at this and shuddering
     - Telephone numbers
 
 ---
-### One model that needs to host different 
+### One model that needs to host different types
 - Timeline entry
   - Can contain a link, a video, an image etc
 
@@ -294,21 +317,84 @@ class SentEmail(models.Model):
 
 ---
 ## Build a really tight API
-
+- 
 ---
 ## Go from parent to child
+```py
+for customer in Customers.objects.all():
+    do_something(customer.events.all())
+    
+for event in Event.objects.all():
+    if isinstance(event.subject, Customer):
+        do_something(event)
+    if isinstance(event.subject, Job):
+        do_something_else(event)
+```
+@[1-2](Predictable collection of children)
+@[3-7](Unpredictable parent: ugly branching)
 
 ---
 ## PROTECT your content types
 
+```py
+class SentEmail(models.Model):
+    text = models.TextField()
+    
+    object_id = models.BigIntegerField()
+    content_type = models.ForeignKey(ContentType, on_delete=PROTECT)
+    sent_to = GenericForeignKey('content_type', 'object_id')
+```
+@[5](Cannot remove a content type referenced by an instance unknowingly)
+
 ---
 ## Perhaps use simulated deletion?
 
+```py
+class Job(models.Model):
+    is_deleted = models.BooleanField(default=False)
+```
+@[2](Avoid dangling references by never deleting anything)
+
 ---
-## Use `prefetch_related`
+## Use `prefetch_related` on child models
+
+```py
+>>> Event.objects.all().select_related('subject')
+
+---------------------------------------------------------------------------
+FieldError                                Traceback (most recent call last)
+...
+FieldError: Invalid field name(s) given in select_related
+
+>>> Event.objects.prefetch_related('subject')
+
+<QuerySet [<Event: Changed name to Emma>,...]>
+```
+@[1-7](Cannot join to get down to 1 query)
+@[8-10](It will do n+1 queries; number of distinct content types in results)
+
+---
+## Use `prefetch_related` on parent models with Generic Relations
+```py
+>>> Customer.objects.all().select_related('events')
+
+---------------------------------------------------------------------------
+FieldError                                Traceback (most recent call last)
+...
+FieldError: Invalid field name(s) given in select_related: 'events'
+
+>>> Customer.objects.all().prefetch_related('events')
+
+<QuerySet [<Customer: Gareth >...]>
+>>> 
+@[8-10](2 queries to get instances and their children)
 
 ---
 ## Index, index, index
+- Index on object ID field, or your performance will stink
+- Can `index_together` content type and object ID
+    - Postgres can use multiple indices
+    - indexing together is better for range queries, but don't often do ranges of IDs
 
 ---
 # Conclusion
