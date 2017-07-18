@@ -261,14 +261,14 @@ The purists are looking at this and shuddering
 ## Common metadata across models
 - Revisions
 - Tags
-- Specialised data with different owners
-    - telephone numbers
+- Ratings
 
 ---
 ### Hanging extra content related to any model
 - Comments
-- Tickets
-- Ratings
+- Messages
+- Specialised data with different owners
+    - Telephone numbers
 
 ---
 ### One model that needs to host different 
@@ -278,18 +278,16 @@ The purists are looking at this and shuddering
 ---
 ### Portable Django apps
 - Can be completely open to the user's own models
-
-#### An email service
-- You run an email service, and you want to provide a Django app
-- Create your own model to record a sent email
-- Add GFKs for sent_to and sent_by
-  - Any model in the user's app can send to any other model
-  
----
-Used properly, can enable:
-- Looser coupling
-- Extensability
-- Openness about the future
+<br>
+```py
+class SentEmail(models.Model):
+    text = models.TextField()
+    
+    object_id = models.BigIntegerField()
+    content_type = models.ForeignKey(ContentType)
+    sent_to = GenericForeignKey('content_type', 'object_id')
+```
+@[6]
 
 ---
 # Patterns
@@ -314,7 +312,5 @@ Used properly, can enable:
 
 ---
 # Conclusion
-- If anyone says "X is great, let's use it for everything" be suspicious
-- If anyone says "X is terrible, it has no place in anyone's code" be suspicious
-- Let’s be thankful that Django’s core developers have a keen sense of purity, 
-- Meanwhile I’m going to be using the tools that help me model my domain effectively and intuitively
+## There are no absolutes
+## Use your head
