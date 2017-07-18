@@ -2,7 +2,9 @@
 
 ---?image=images/heres-why-not.png&size=80%
 
----?image=images/hey-why-not.png&size=40%
+---?image=images/hey-why-not.png&size=60%
+
+---?image=images/scales.jpg
 
 ---
 ### Foreign key
