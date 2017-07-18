@@ -32,71 +32,90 @@
 ### Let's keep track of changes to our models
 ```py 
 class Event(models.Model):
-    attribute_changes = JSONField()
+    changes = JSONField()
     occurred_at = models.DateTimeField(auto_now_add=True)
     
     object_id = models.BigIntegerField()
     content_type = models.ForeignKey(ContentType)
-    subject = GenericForeignKey('content_type', 'instance_id')
+    subject = GenericForeignKey('content_type', 'object_id')
 ```
 @[1-3](We want to serialize the changes, and when they occurred)
-@[4-5](We will store the ID of the model that changed)
+@[5](We will store the ID of the model that changed)
 @[6](We will store the type of the model that changed)
-@[6](Wrap content_type and object_id as a GFK)
+@[5-7](Wrap content_type and object_id as a GFK)
 ---
+### What is GenericForeignKey doing?
+
 ```py
-class Job(models.Model):
-    location = models.ForeignKey(...)
-   
-class Cleaner(models.Model):
-    jobs = models.ManyToManyField(Job)
+class GenericForeignKey(object):
+    def contribute_to_class(self, cls, name, **kwargs):
+        cls._meta.add_field(self, private=True)
+        setattr(cls, name, self)
+        
+    def __get__(self, instance):
+        return instance.content_type.get_object_for_this_type(
+            instance.object_id
+        )
 ```
+@[2-4](Add self as a field on the model class)
+@[6-9](Work as a descriptor using content type and object ID to return referenced model)
+
 ---
 ### Creation
 ```py
-def send_and_record_spam(instance):
-    spam_text = generate_spam()
-    send_email(instance.email, spam_text)
-    Spam.objects.create(sent_to=instance, text=spam_text)
-    
-def spam_customers():
-    for _ in xrange(100000):
-        send_and_record_spam(Customer.objects.order_by('?').first())
+class Cleaner(models.Model):
+    name = models.CharField(...)
 
-def spam_employees():
-    for _ in xrange(100000):
-        send_and_record_spam(Employee.objects.order_by('?').first())
+class Job(models.Model):
+    cleaner = models.ForeignKey(Cleaner)
+    started_at = models.DateTimeField()
+    
+def assign_job(job, cleaner):
+    job.cleaner = cleaner
+    job.save()
+    Event.objects.create(
+        subject=job, changes={'cleaner': cleaner.id}
+    )
+    
+def set_cleaner_name(cleaner, name):
+    cleaner.name = name
+    cleaner.save()
+    Event.objects.create(
+        subject=cleaner, changes={'name': name}
+    )
 ```
 ---
 ### Retrieval
 ```py
->>> first_spam = Spam.objects.order_by('sent_at').first()
->>> first_spam.sent_to
+>>> first_event = Event.objects.order_by('occurred_at').first()
+>>> first_event.subject
 
-<Customer: Pam>
+<Job: cleaning at Pam's>
 
->>> last_spam = Spam.objects.order_by('sent_at').last()
->>> last_spam.sent_to
+>>> last_event = Event.objects.order_by('occurred_at').last()
+>>> last_event.subject
 
-<Employee: Raj>
+<Cleaner: Alex>
 ```
 ---
 ### Querying
 ```
->>> customer = Customer.objects.get(email='spam_trap@gmail.com')
->>> Spam.objects.filter(sent_to=customer)
+>>> cleaner = Cleaner.objects.get(name='Alex')
+>>> Event.objects.filter(subject=cleaner)
 
 ---------------------------------------------------------------------------
 FieldError                                Traceback (most recent call last)
 ...
-FieldError: Field 'sent_to' does not generate an automatic reverse relation and therefore cannot be used for reverse querying. If it is a GenericForeignKey, consider adding a GenericRelation.
+FieldError: Field 'subject' does not generate an automatic reverse relation...
 
->>> content_type = ContentType.objects.get_for_model(Customer)
->>> Spam.objects.filter(content_type=content_type, object_id=customer.id)]
 
-<QuerySet [<Spam: 'You have won the lottery'>, <Spam: 'You have won the lottery'>, <Spam: 'You have won the lottery'>, ... ]>
+>>> content_type = ContentType.objects.get_for_model(Cleaner)
+>>> Spam.objects.filter(content_type=content_type, object_id=cleaner.id)]
+
+<QuerySet [<Event: 'Name changed to Alex'>]>
 ```
-
+---
+### GenericRelations
 ---
 ## Generic foreign keys considered harmful?
 Django core committers advising against using them
