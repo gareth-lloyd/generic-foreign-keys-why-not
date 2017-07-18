@@ -58,7 +58,7 @@ class Event(models.Model):
 @[6](We will store the type of the model that changed)
 @[5-7](Wrap content_type and object_id as a GFK)
 
----
++++
 ### Let's get meta with ContentTypes
 
 - Model to describe models:
@@ -71,8 +71,8 @@ class Event(models.Model):
 
 <Customer: Gareth>
 ```
----
 
+---
 ### The Generic Foreign Key field class
 ```py
 class GenericForeignKey(object):
@@ -214,7 +214,7 @@ WHERE "cleaners_cleaner"."name" = 'Frederick'
 ```
 
 ---
-## Ability to make polymorphic links between models, with a nice Django-style API
+## Polymorphic links between models, with a nice Django-style API
 
 ---
 ## Generic foreign keys considered harmful?
@@ -266,7 +266,8 @@ The purists are looking at this and shuddering
 ---
 # Yeah, but at least it's not MongoDB
 - I'm a pragmatist
-- I can give up some purity for a practical solution
+- Purity is always illusive
+- We are always sacrificing some purity for a practical solution
 
 ---
 # Applications
@@ -309,7 +310,9 @@ class SentEmail(models.Model):
 
 ---
 ## Build a really tight API
-- 
+- Have strict rules, enforce them with assertions
+- Use transactions to enforce data integrity
+
 ---
 ## Go from parent to child
 ```py
@@ -392,3 +395,10 @@ FieldError: Invalid field name(s) given in select_related: 'events'
 # Conclusion
 ## There are no absolutes
 ## Use your head
+
+---
+# Housekeep
+
+We are hiring pragmatic Python and Javascript developers
+
+gareth.lloyd@housekeep.com
