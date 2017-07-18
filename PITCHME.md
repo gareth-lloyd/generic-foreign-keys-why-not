@@ -58,7 +58,7 @@ class Event(models.Model):
 @[6](We will store the type of the model that changed)
 @[5-7](Wrap content_type and object_id as a GFK)
 
-+++
+---
 ### Let's get meta with ContentTypes
 
 - Model to describe models:
@@ -89,6 +89,18 @@ class GenericForeignKey(object):
 @[6-9](Use the particular content type and ID to return referenced model)
 
 ---
+```py 
+class Event(models.Model):
+    changes = JSONField()
+    occurred_at = models.DateTimeField(auto_now_add=True)
+    
+    object_id = models.BigIntegerField()
+    content_type = models.ForeignKey(ContentType)
+    subject = GenericForeignKey('content_type', 'object_id')
+```
+@[7](Use the particular content type and ID to return referenced model)
+
+---
 ### Record a change to a model
 ```py
 class Cleaner(models.Model):
@@ -103,7 +115,7 @@ def set_cleaner_name(cleaner, name):
     cleaner.save()
     record_changes(cleaner, ['name'])
 ```
-@[4-5]
+@[4-5](This is our API for recording change to any model)
 
 ---
 ### Record a change to a different type of model
@@ -121,7 +133,8 @@ def start_job(job):
     job.started_at = datetime.now()
     record_changes(job, ['started_at'])
 ```
-@[9]
+@[8]
+@[12]
 
 ---
 ### Retrieval
