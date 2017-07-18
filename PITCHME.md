@@ -176,26 +176,55 @@ WHERE "cleaners_cleaner"."name" = 'gareth'
     )
 }
 
->>> annotated_cleaner = Cleaner.objects.annotate(Count('events')).get()
->>> annotated_cleaner.events__count
+>>> cleaners = Cleaner.objects.annotate(Count('events'))
+>>> cleaner = cleaners.get(name='Frederick')
+>>> cleaner.events__count
 
 2
 ```
 
 ---
-# Generic foreign keys considered harmful?
+## Ability to make polymorphic links between models, with a nice Django-style API
 
 ---
-### Ability to make polymorphic links between models, with a nice Django-style API
+## Generic foreign keys considered harmful?
 
-### So why are Django core developers advising against using them?
+Core developers are warning us off
 
 Luke Plant: <a href="https://lukeplant.me.uk/blog/posts/avoid-django-genericforeignkey/" target="_blank">Avoid Generic Foreign keys</a>.
 
 Marc Tamlyn: <a href="https://www.youtube.com/watch?v=aDt4gu99_bE" target="_blank">Weird and wonderful things to do with the ORM</a>.
 
 ---
+## Referential integrity
 
+---
+## Lack of `on_delete` support
+
+---
+## Model changes can hurt your data
+
+Let's change `Cleaner` to `HomeCleaner`
+
+```sh
+$ ./manage.py makemigrations
+$ ./manage.py migrate
+```
+
+```py
+>>> Event.objects.first().subject
+
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+/srv/housekeep/housekeep/fixes/shortcuts/__init__.pyc in <module>()
+
+AttributeError: 'NoneType' object has no attribute '_base_manager'
+```
+---
+## It's just too loosey goosey
+
+---
+# My def
 ---
 ## Applications: adding common metadata across models
 - Revisions
