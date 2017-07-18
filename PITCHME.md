@@ -61,11 +61,21 @@ class GenericForeignKey(object):
 @[6-9](Work as a descriptor using content type and object ID to return referenced model)
 
 ---
-### Creation
+### Record a change to a model
 ```py
 class Cleaner(models.Model):
     name = models.CharField(...)
-
+    
+def set_cleaner_name(cleaner, name):
+    cleaner.name = name
+    cleaner.save()
+    Event.objects.create(
+        subject=cleaner, changes={'name': name}
+    )
+```
+---
+### Record a change to a different type of model
+```py
 class Job(models.Model):
     cleaner = models.ForeignKey(Cleaner)
     started_at = models.DateTimeField()
@@ -76,13 +86,6 @@ def assign_job(job, cleaner):
     Event.objects.create(
         subject=job, changes={'cleaner': cleaner.id}
     )
-    
-def set_cleaner_name(cleaner, name):
-    cleaner.name = name
-    cleaner.save()
-    Event.objects.create(
-        subject=cleaner, changes={'name': name}
-    )
 ```
 ---
 ### Retrieval
@@ -90,12 +93,12 @@ def set_cleaner_name(cleaner, name):
 >>> first_event = Event.objects.order_by('occurred_at').first()
 >>> first_event.subject
 
-<Job: cleaning at Pam's>
+<Job: "Cleaning at Pam's">
 
 >>> last_event = Event.objects.order_by('occurred_at').last()
 >>> last_event.subject
 
-<Cleaner: Alex>
+<Cleaner: "Alex">
 ```
 ---
 ### Querying
