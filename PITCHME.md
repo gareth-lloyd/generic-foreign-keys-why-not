@@ -152,6 +152,7 @@ class Cleaner(models.Model):
 <QuerySet [<Event: 'Name changed to Frederick'>]>
 ```
 @[3]
+@[5-7]
 
 ```sql
 SELECT *
@@ -162,6 +163,7 @@ INNER JOIN "cleaners_cleaner" ON (
 )
 WHERE "cleaners_cleaner"."name" = 'gareth'
 ```
+@[1-7]
 
 ---
 ### GenericRelation also enables aggregation
