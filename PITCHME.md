@@ -339,7 +339,7 @@ for event in Event.objects.all():
         do_something_else(event)
 ```
 @[1-2](Predictable collection of children)
-@[3-7](Unpredictable parent: ugly branching)
+@[3-8](Unpredictable parent: ugly branching)
 
 ---
 ## PROTECT your content types
