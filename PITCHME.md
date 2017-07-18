@@ -60,10 +60,10 @@ class Event(models.Model):
 
 ---
 ### Let's get meta with ContentTypes
-- Model to describe models
-```sql
-Table "public.django_content_type"
 
+- Model to describe models:
+
+```sql
   Column   |          Type          |    Modifiers                             
 -----------+------------------------+-------------------
  id        | integer                | not null
