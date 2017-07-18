@@ -59,12 +59,11 @@ class Event(models.Model):
 @[5-7](Wrap content_type and object_id as a GFK)
 
 ---
-### Content types: let's get meta
-
-- It's a model to describe models
+### Let's get meta with ContentTypes
+- Model to describe models
 ```sql
-# \d django_content_type;
-                                  Table "public.django_content_type"
+Table "public.django_content_type"
+
   Column   |          Type          |    Modifiers                             
 -----------+------------------------+-------------------
  id        | integer                | not null
