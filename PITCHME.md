@@ -383,10 +383,11 @@ FieldError: Invalid field name(s) given in select_related
 
 ---
 ## Use `prefetch_related` on parent models with Generic Relations
-```py
+
+```
 >>> Customer.objects.all().select_related('events')
 
----------------------------------------------------------------------------
+----------------------------------------------------
 FieldError                                Traceback (most recent call last)
 ...
 FieldError: Invalid field name(s) given in select_related: 'events'
@@ -394,7 +395,7 @@ FieldError: Invalid field name(s) given in select_related: 'events'
 >>> Customer.objects.all().prefetch_related('events')
 
 <QuerySet [<Customer: Gareth >...]>
->>> 
+```
 @[8-10](2 queries to get instances and their children)
 
 ---
