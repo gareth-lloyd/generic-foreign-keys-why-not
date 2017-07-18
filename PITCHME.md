@@ -253,8 +253,6 @@ The purists are looking at this and shuddering
 - I'm a pragmatist
 - I can give up some purity for a practical solution
 
-> Normalisation is for wimps
-
 ---
 # Applications
 
