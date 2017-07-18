@@ -14,6 +14,18 @@
 - Automatically indexed for performance
 - Effortless querying forward and backwards
 
++++?image=images/referential_integrity_1.png&size=80%
+## Referential Integrity
+
++++?image=images/cascade.png&size=80%
+## Cascade 
+
++++?image=images/protect.png&size=80%
+## Protect
+
++++?image=images/set_null.png&size=80%
+## Set null
+
 ---
 ### Generic foreign key
 - Reference that uniquely identifies a model
