@@ -212,7 +212,7 @@ Marc Tamlyn: <a href="https://www.youtube.com/watch?v=aDt4gu99_bE" target="_blan
 ---
 ## Referential integrity
 
-![IMAGE]images/dangling-references.png
+![IMAGE](images/dangling-references.png&size=70%)
 
 ---
 ## Crude `on_delete` support
@@ -244,7 +244,7 @@ AttributeError: 'NoneType' object has no attribute '_base_manager'
 ---
 # Purity
 
-![IMAGE]images/dangling-references.png&size=60%
+![IMAGE](images/dangling-references.png&size=60%)
 
 The purists are looking at this and shuddering
 
