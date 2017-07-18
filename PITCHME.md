@@ -212,8 +212,10 @@ Marc Tamlyn: <a href="https://www.youtube.com/watch?v=aDt4gu99_bE" target="_blan
 ---
 ## Referential integrity
 
+![IMAGE]images/dangling-references.png
+
 ---
-## Lack of `on_delete` support
+## Crude `on_delete` support
 
 ---
 ## Model changes can hurt your data
@@ -235,29 +237,51 @@ AttributeError                            Traceback (most recent call last)
 AttributeError: 'NoneType' object has no attribute '_base_manager'
 ```
 ---
-## It's just too loosey goosey
+## It couples your database schema to your application code
+
+> Data matures like wine, application code matures like fish. Your database will likely outlast the application in its current incarnation, so it would be nice if it makes sense on its own, without needing the application code to understand what it is talking about.
 
 ---
-# My def
+# Purity
+
+![IMAGE]images/dangling-references.png&size=60%
+
+The purists are looking at this and shuddering
+
 ---
-## Applications: adding common metadata across models
+# Yeah, but at least it's not MongoDB
+- I'm a pragmatist
+- I can give up some purity for a practical solution
+
+> Normalisation is for wimps
+
+---
+# Applications
+
+---
+
+## Common metadata across models
 - Revisions
 - Tags
-- Common properties, such as telephone numbers
+- Specialised data with different owners
+    - telephone numbers
 
 ---
-### Applications: adding additional content related to any model
+### Hanging extra content related to any model
 - Comments
 - Tickets
 - Ratings
 
 ---
-### Applications: containing many different things
-- Tumble log entry
+### One model that needs to host different 
+- Timeline entry
   - Can contain a link, a video, an image etc
-  
+
 ---
-### Applications: portable third party apps
+### Portable Django apps
+- Can be completely open to the user's own models
+
+#### An email service
 - You run an email service, and you want to provide a Django app
 - Create your own model to record a sent email
 - Add GFKs for sent_to and sent_by
@@ -270,4 +294,29 @@ Used properly, can enable:
 - Openness about the future
 
 ---
-## So there are these great applications. Can we overcome the bad bits?
+# Patterns
+
+---
+## Build a really tight API
+
+---
+## Go from parent to child
+
+---
+## PROTECT your content types
+
+---
+## Perhaps use simulated deletion?
+
+---
+## Use `prefetch_related`
+
+---
+## Index, index, index
+
+---
+# Conclusion
+- If anyone says "X is great, let's use it for everything" be suspicious
+- If anyone says "X is terrible, it has no place in anyone's code" be suspicious
+- Let’s be thankful that Django’s core developers have a keen sense of purity, 
+- Meanwhile I’m going to be using the tools that help me model my domain effectively and intuitively
