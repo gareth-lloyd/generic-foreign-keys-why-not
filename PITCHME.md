@@ -170,7 +170,11 @@ WHERE "cleaners_cleaner"."name" = 'gareth'
 ```py
 >>> Cleaner.objects.aggregate(Min('events__occurred_at'))
 
-{'events__created__min': datetime.datetime(2015, 2, 26, 20, 35, 18, 771908, tzinfo=<UTC>)}
+{
+    'events__created__min': (
+        datetime.datetime(2015, 2, 26, 20, 35, 18, 771908, tzinfo=<UTC>)
+    )
+}
 
 >>> annotated_cleaner = Cleaner.objects.annotate(Count('events')).get()
 >>> annotated_cleaner.events__count
