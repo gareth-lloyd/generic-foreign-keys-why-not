@@ -21,6 +21,7 @@
 - ~~Effortless querying forward and backwards~~
 
 ---?image=images/scarcely.png
+---
 
 ### Generic foreign keys have this one weird trick
 
