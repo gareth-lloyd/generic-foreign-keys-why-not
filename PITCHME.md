@@ -4,7 +4,7 @@
 
 ---?image=images/hey-why-not.png&size=60%
 
----?image=images/scales.jpg
+---?image=images/scales.jpg&size=80%
 
 ---
 ### Foreign key
