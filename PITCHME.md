@@ -63,17 +63,10 @@ class Event(models.Model):
 
 - Model to describe models:
 
-```sql
-  Column   |          Type          |    Modifiers                             
------------+------------------------+-------------------
- id        | integer                | not null
- app_label | character varying(100) | not null
- model     | character varying(100) | not null
----
-```
-
 ```py
->>> ct = ContentType.objects.get_for_model(Customer)
+>>> ct = ContentType.objects.get(
+    app_label='customer', model='customer'
+)
 >>> ct.get_object_for_this_type(id=1)
 
 <Customer: Gareth>
