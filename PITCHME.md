@@ -293,19 +293,19 @@ The purists are looking at this and shuddering
 - Ratings
 
 ---
-### Hanging extra content related to any model
+## Hanging extra content related to any model
 - Comments
 - Messages
 - Specialised data with different owners
     - Telephone numbers
 
 ---
-### One model that needs to host different types
+## One model that needs to host different types
 - Timeline entry
   - Can contain a link, a video, an image etc
 
 ---
-### Portable Django apps
+## Portable Django apps
 - Can be completely open to the user's own models
 <br>
 ```py
