@@ -270,7 +270,7 @@ AttributeError: 'NoneType' object has no attribute '_base_manager'
 > Data matures like wine, application code matures like fish. Your database will likely outlast the application in its current incarnation, so it would be nice if it makes sense on its own, without needing the application code to understand what it is talking about.
 
 ---
-# Purity
+## Purity
 
 ![IMAGE](images/dangling-references.png)
 
