@@ -115,7 +115,7 @@ def set_cleaner_name(cleaner, name):
     cleaner.save()
     record_changes(cleaner, ['name'])
 ```
-@[4-5](This is our API for recording change to any model)
+@[4-6](This is our API for recording change to any model)
 
 ---
 ### Record a change to a different type of model
