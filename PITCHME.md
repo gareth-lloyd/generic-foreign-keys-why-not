@@ -382,7 +382,7 @@ FieldError: Invalid field name(s) given in select_related
 @[8-10](It will do n+1 queries; number of distinct content types in results)
 
 ---
-## Use `prefetch_related` on parent models with Generic Relations
+## Use `prefetch_related` on parent models
 
 ```
 >>> Customer.objects.all().select_related('events')
